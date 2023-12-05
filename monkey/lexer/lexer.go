@@ -33,7 +33,8 @@ func (l *Lexer) readChar() {
 	l.readPosition += 1
 }
 
-// NextToken looks at the character currently at l.ch,  returns a corresponding token, and then increments to the next ch.
+// NextToken looks at the character currently at l.ch,  returns a corresponding token,
+// and then increments to the next ch.
 func (l *Lexer) NextToken() token.Token {
 	var _token token.Token
 
@@ -80,6 +81,7 @@ func (l *Lexer) NextToken() token.Token {
 	return _token
 }
 
+// skipWhitespace increments the lexer's position and readPosition until it finds a non-whitespace character.
 func (l *Lexer) skipWhitespace() {
 	for l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' {
 		l.readChar()
@@ -104,6 +106,7 @@ func isLetter(ch byte) bool {
 	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_'
 }
 
+// isDigit accepts a char as byte and determines if its value matches 0-9
 func isDigit(ch byte) bool {
 	return '0' <= ch && ch <= '9'
 }
@@ -112,6 +115,8 @@ func newToken(tokenType token.TokenType, ch byte) token.Token {
 	return token.Token{Type: tokenType, Literal: string(ch)}
 }
 
+// readNumber reads input and continues to increment position and readPosition until it finds a non-digit character
+// it then returns slice of input corresponding to all the digits in a row (a whole number).
 func (l *Lexer) readNumber() string {
 	position := l.position
 	for isDigit(l.ch) {
